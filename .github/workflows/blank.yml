@@ -1,0 +1,311 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+       <html>
+<title>Javacript Datepicker</title>
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        .not_empty_text:hover{
+            background-color: #0f6674;
+            color: white;
+        }
+
+        /*tr:nth-child(even) {*/
+        /*    background-color: #dddddd;*/
+        /*}*/
+        #date-table{
+            width: 400px;
+            height: auto;
+        }
+        .cursor-pointer{
+            cursor: pointer;
+        }
+        #dynamic_year_month{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row m-auto justify-content-center">
+            <div class="row col-md-12 justify-content-center">
+                <h1 class="h5">Hello welcome to javacript Datepicker</h1>
+            </div>
+            <br/>
+            <div class="row">
+                <table id="date-table">
+                    <thead id="date-table-thead">
+                    <tr>
+                        <th id="prev_month" class="cursor-pointer">Prev</th>
+                        <th colspan="2" id="month_static" class="cursor-pointer"></th>
+                        <th colspan="3" id="dynamic_year_month" class="cursor-pointer"></th>
+                        <th id="next_month" class="cursor-pointer">Next</th>
+                    </tr>
+                    </thead>
+                    <tbody id="date-table-body">
+                    <tr>
+                        <td id="days-0">Sun</td>
+                        <td id="days-1">Mon</td>
+                        <td id="days-2">Tue</td>
+                        <td id="days-3">Wed</td>
+                        <td id="days-4">Thru</td>
+                        <td id="days-5">Fri</td>
+                        <td id="days-6">Sat</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        console.log('document loaded');
+        $('#select_year_option').change(function(){
+            // change_year();
+            change_year_in_select_box();
+        });
+        $("#select_year_option").val(dateObj.getFullYear()).change();
+    })
+    var dateObj = new Date();
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    (function(){
+        console.log('document loaded before');
+        // console.log(dateObj.getDay(),dateObj.getFullYear(),dateObj.getMonth());
+        var month = months[dateObj.getMonth()];
+        var year = dateObj.getFullYear();
+        document.getElementById('month_static').innerHTML = month;
+        document.getElementById('dynamic_year_month').innerHTML = month+' '+year;
+        document.getElementById('dynamic_year_month').setAttribute('data-date',dateObj.getMonth()+'-'+year);
+        document.getElementById('prev_month').setAttribute('data-date',parseInt(dateObj.getMonth()-1)+'-'+year);
+        document.getElementById('next_month').setAttribute('data-date',parseInt(dateObj.getMonth()+1)+'-'+year);
+        var day = days[dateObj.getDay()];
+        var month_int_value = dateObj.getMonth();
+        var day_int_value = dateObj.getDay();
+        var get_total_days_val = get_total_days(year,month_int_value);
+        var start_of_day_in_current_month = new Date(dateObj.getFullYear(), dateObj.getMonth(), 1).getDay();
+        fetch_days_in_table(year,month_int_value,start_of_day_in_current_month,get_total_days_val);
+        createSelectOption(month)
+    })();
+    function get_total_days(year,month_int_val){
+        return (32 - new Date(year,month_int_val,32).getDate());
+    }
+    function fetch_days_in_table(year,month_int_val,day_int_val,total_days_of_month){
+        console.log(year,month_int_val,day_int_val,total_days_of_month);
+        document.querySelectorAll('.table-td-parent-value').forEach(function(a){
+            a.remove()
+        });
+        document.getElementById('month_static').innerHTML = months[month_int_val];
+        // document.getElementById('dynamic_year_month').textContent = months[month_int_val]+' '+year;
+        var k=0;
+        for(i=0;i<6;i++){
+            var row = document.createElement('tr');
+            row.setAttribute('class','table-td-parent-value cursor-pointer');
+            for(j=0;j<7;j++){
+                if(j>=day_int_val){
+                    k+=1;
+                    if(k<=total_days_of_month){
+                        var each_cell = document.createElement('td');
+                        each_cell.setAttribute('class','not_empty_text');
+                        var cell_value = document.createTextNode(k);
+                        each_cell.appendChild(cell_value);
+                        row.appendChild(each_cell);
+                        // console.log('if - if',total_days_of_month);
+                    }else if(j==0){
+                        var each_cell = document.createElement('td');
+                        var cell_value = document.createTextNode('');
+                        each_cell.appendChild(cell_value);
+                        row.appendChild(each_cell);
+                        // console.log('if - else');
+                    }
+                }else{
+                    if(k==0){
+                        var each_cell = document.createElement('td');
+                        var cell_value = document.createTextNode('');
+                        each_cell.appendChild(cell_value);
+                        row.appendChild(each_cell);
+                        // console.log('else if');
+                    }else if(k<total_days_of_month){
+                        k+=1;
+                        var each_cell = document.createElement('td');
+                        each_cell.setAttribute('class','not_empty_text');
+                        var cell_value = document.createTextNode(k);
+                        each_cell.appendChild(cell_value);
+                        row.appendChild(each_cell);
+                        // console.log('else else');
+                    }
+                }
+                var parent_ele = document.getElementById('date-table-body');
+                // console.log(parent_ele);
+                parent_ele.appendChild(row);
+            }
+        }
+    }
+    document.getElementById("dynamic_year_month").onclick = function(){
+        // console.log('true,kaushal');
+
+    }
+    function change_year_in_select_box(){
+        // var year_value = document.getElementById('select_year_option').value;
+        // $("#select_year_option").val(year_value).change();
+        change_year();
+    }
+    document.getElementById('prev_month').onclick = function () {
+        var dataText = document.getElementById('prev_month').getAttribute('data-date');
+        var month = dataText.split('-')[0];
+        var year = dataText.split('-')[1];
+        var start_of_day_in_current_month = new Date(year, month, 1).getDay();
+        console.log(month,year,start_of_day_in_current_month);
+        var total_days_of_month = get_total_days(year,month);
+        if(parseInt(year) === 1984 && parseInt(month) === 11 ){
+            console.log('chalo bhai kam hogaua');
+            return false;
+        }else{
+            console.log('nai hua');
+        }
+        if(parseInt(month) === 11){
+            console.log('MONTJ');
+            $("#select_year_option").val(parseInt(year)).change();
+        }
+        // document.getElementById('next_month').setAttribute('data-date',(parseInt(month)-1)+'-'+year);
+        console.log(month);
+        if(month<=0){
+            console.log('if');
+            month=parseInt(0);
+            // year = parseInt(year)-1;
+            document.getElementById('prev_month').setAttribute('data-date',11+'-'+(parseInt(year)-1));
+            document.getElementById('next_month').setAttribute('data-date',0+'-'+(parseInt(year)+1));
+            // $("#select_year_option").val(parseInt(year)-1).change();
+            fetch_days_in_table(year,month,start_of_day_in_current_month,total_days_of_month);
+        }
+        else {
+            console.log('else');
+            document.getElementById('prev_month').setAttribute('data-date',(parseInt(month)-1)+'-'+year);
+            document.getElementById('next_month').setAttribute('data-date',(parseInt(month)+1)+'-'+year);
+            fetch_days_in_table(year,month,start_of_day_in_current_month,total_days_of_month);
+        }
+        // console.log(month,year,typeof (month),typeof (year));
+        // return false;
+        // document.getElementById('dynamic_year_month').textContent = months[month]+' '+year;
+
+    }
+    document.getElementById('next_month').onclick = function () {
+        var dataText = document.getElementById('next_month').getAttribute('data-date');
+        var month = dataText.split('-')[0];
+        var year = dataText.split('-')[1];
+        var start_of_day_in_current_month = new Date(year, month, 1).getDay();
+        console.log(month,year,start_of_day_in_current_month);
+        var total_days_of_month = get_total_days(year,month);
+        // document.getElementById('dynamic_year_month').textContent = months[month]+' '+year;
+        if(parseInt(year) === 2020 && parseInt(month) === 12 ){
+            console.log('chalo bhai kam hogaua');
+            return false;
+        }else{
+            console.log('nai hua');
+        }
+        if(month==12){
+            month=parseInt(0);
+            year = parseInt(year)+1;
+            var prev_year = parseInt(year)-1;
+            console.log(prev_year);
+            fetch_days_in_table(year,month,start_of_day_in_current_month,total_days_of_month);
+            $("#select_year_option").val(year).change();
+            document.getElementById('next_month').setAttribute('data-date',0+'-'+year);
+            document.getElementById('prev_month').setAttribute('data-date',11+'-'+prev_year);
+            console.log('if');
+        }
+        else{
+            fetch_days_in_table(year,month,start_of_day_in_current_month,total_days_of_month);
+            document.getElementById('next_month').setAttribute('data-date',(parseInt(month)+1)+'-'+year);
+            document.getElementById('prev_month').setAttribute('data-date',(parseInt(month)-1)+'-'+year);
+            // console.log('else');
+        }
+        // console.log(month);
+        // console.log(month,year);
+
+    }
+    function createSelectOption(month,current_year=null){
+        var select_option = document.createElement('select');
+        var start_year = 1985;
+        var end_year = 2020;
+        for(i=start_year;i<=end_year;i++){
+            var option  = document.createElement('option');
+            option.setAttribute('value',i);
+            // option.setAttribute('onchange',"change_year("+i+")");
+            var text = document.createTextNode(i);
+            option.appendChild(text);
+            select_option.appendChild(option);
+        }
+        if(current_year != 'null'){
+            $("#select_year_option").val(current_year).change();
+        }
+        var dynamic_year_month = document.getElementById('dynamic_year_month');
+        // dynamic_year_month.innerHTML = select_option;
+        document.getElementById('dynamic_year_month').innerHTML =  '<select id="select_year_option">'+select_option.innerHTML+'</select>';
+    }
+        // if(element.length == 1){
+        //     document.onload = function(){
+        //         var element = document.getElementById('select_year_option');
+        //         console.log('document loaded');
+        //         element.onchange  = change_year();
+        //     }
+        // }
+          function change_year(){
+              console.log('onchnage');
+                if (this.selectedIndex !== 0) {
+                    var day = days[0];
+                    var month_int_value = 0;
+                    var day_int_value = 0;
+                    var month = months[0];
+                    var year = parseInt(document.getElementById('select_year_option').value);
+                    console.log(year,typeof year,);
+                    if(isNaN(year)){
+                        console.log('got into if');
+                        return false;
+                    }
+                    // year = 2006;
+                    // document.getElementById('dynamic_year_month').innerHTML = month+' '+year;
+                    document.getElementById('month_static').innerHTML = month;
+                    // createSelectOption(month,year);
+                    document.getElementById('prev_month').setAttribute('data-date',parseInt(11)+'-'+(parseInt(year)-1));
+                    document.getElementById('next_month').setAttribute('data-date',parseInt(1)+'-'+year);
+                    var get_total_days_val = get_total_days(year,month_int_value);
+                    var start_of_day_in_current_month = new Date(year, month_int_value, 1).getDay();
+                    console.log(start_of_day_in_current_month,get_total_days_val,month_int_value,year,month,new Date(1985, 0, 1).getDay(),);
+                    fetch_days_in_table(year,month_int_value,start_of_day_in_current_month,get_total_days_val);
+                }
+            }
+</script>
+</body>
+
+</html>
